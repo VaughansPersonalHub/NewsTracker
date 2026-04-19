@@ -6,9 +6,8 @@
 // See README.md for deployment steps.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-oDlpZoQfvic6pYhjzbsntT0TeMCv4BX_xEOyFVuIbY1_KTyvPPeTSQj42HFkcwwX/exec';
 
-// GDELT Doc 2.0 API — no API key required, CORS-enabled.
-// Docs: https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
-const GDELT_API = 'https://api.gdeltproject.org/api/v2/doc/doc';
+// GDELT is called server-side via the Apps Script (action=search) to avoid
+// browser CORS restrictions. Docs: https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
 
 // ---------- State ----------
 let currentTestPerson = null;   // { name, company, query }
@@ -222,18 +221,20 @@ testRunBtn.addEventListener('click', async () => {
   setStatus(testStatus, 'Searching GDELT…', 'muted');
 
   try {
-    const url = buildGdeltUrl(query, range.start, range.end);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`GDELT HTTP ${res.status}`);
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      // GDELT occasionally returns an HTML error page or empty body on malformed queries.
-      throw new Error('GDELT returned a non-JSON response. Try tightening the query.');
+    const params = new URLSearchParams({
+      action: 'search',
+      query,
+      start: range.start,
+      end: range.end,
+      max: '50',
+    });
+    const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, { redirect: 'follow' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data && data.error) {
+      throw new Error(data.error);
     }
-    renderResults(data.articles || []);
+    renderResults((data && data.articles) || []);
   } catch (err) {
     console.error(err);
     setStatus(testStatus, `Error: ${err.message}`, 'error');
@@ -242,7 +243,7 @@ testRunBtn.addEventListener('click', async () => {
   }
 });
 
-// ---------- GDELT ----------
+// ---------- GDELT date helpers ----------
 function toGdeltDate(date) {
   // YYYYMMDD000000
   return date.toISOString().slice(0, 10).replace(/-/g, '') + '000000';
@@ -253,19 +254,6 @@ function getDateRange(monthsBack) {
   const start = new Date();
   start.setMonth(start.getMonth() - monthsBack);
   return { start: toGdeltDate(start), end: toGdeltDate(end) };
-}
-
-function buildGdeltUrl(queryString, startDate, endDate) {
-  const params = new URLSearchParams({
-    query: queryString,
-    mode: 'ArtList',
-    maxrecords: '50',
-    startdatetime: startDate,
-    enddatetime: endDate,
-    format: 'json',
-    sort: 'DateDesc',
-  });
-  return `${GDELT_API}?${params.toString()}`;
 }
 
 function renderResults(articles) {
