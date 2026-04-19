@@ -6,8 +6,10 @@
 // See README.md for deployment steps.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-oDlpZoQfvic6pYhjzbsntT0TeMCv4BX_xEOyFVuIbY1_KTyvPPeTSQj42HFkcwwX/exec';
 
-// GDELT is called server-side via the Apps Script (action=search) to avoid
-// browser CORS restrictions. Docs: https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
+// Cloudflare Worker that proxies GDELT (Apps Script hits GDELT's per-IP
+// rate limit because it shares outbound IPs with thousands of other scripts).
+// Docs: https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
+const WORKER_URL = 'https://newstracker-gdelt-proxy.vaughan-grant.workers.dev';
 
 // ---------- State ----------
 let currentTestPerson = null;   // { name, company, query }
@@ -222,13 +224,12 @@ testRunBtn.addEventListener('click', async () => {
 
   try {
     const params = new URLSearchParams({
-      action: 'search',
       query,
       start: range.start,
       end: range.end,
       max: '50',
     });
-    const res = await fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, { redirect: 'follow' });
+    const res = await fetch(`${WORKER_URL}/?${params.toString()}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data && data.error) {
