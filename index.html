@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>People-in-the-News Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>People-in-the-News Monitor</h1>
+      <p>Track mentions of people &amp; companies across global news via GDELT.</p>
+    </header>
+
+    <div id="setup-banner" class="banner warning" style="display:none;">
+      <strong>Setup required:</strong> Paste your deployed Google Apps Script Web App URL into
+      <code>app.js</code> (the <code>APPS_SCRIPT_URL</code> constant). See the README for setup steps.
+    </div>
+
+    <section id="add-section">
+      <h2>Add a Person</h2>
+      <form id="add-form" autocomplete="off">
+        <div class="form-row">
+          <input type="text" id="input-name" placeholder="John Smith" required aria-label="Full name" />
+          <input type="text" id="input-company" placeholder="Acme Logistics" required aria-label="Company" />
+          <button type="submit" class="btn-primary" id="add-btn">Add to Watch List</button>
+        </div>
+        <div class="status" id="add-status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section id="list-section">
+      <h2>Watch List</h2>
+      <div class="table-wrap">
+        <table id="people-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Added</th>
+              <th>Test</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="people-tbody">
+            <tr class="empty-row"><td colspan="5"><span class="loading"></span>Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="status" id="list-status" aria-live="polite"></div>
+    </section>
+
+    <section id="test-panel" aria-live="polite">
+      <div class="test-header">
+        <h2 class="test-subject">
+          Testing: <strong id="test-name"></strong> at <strong id="test-company"></strong>
+        </h2>
+        <button type="button" class="close-btn" id="test-close" aria-label="Close test panel">×</button>
+      </div>
+      <div class="test-controls">
+        <label for="lookback">Lookback period:</label>
+        <select id="lookback">
+          <option value="1">1 Month</option>
+          <option value="2">2 Months</option>
+          <option value="3" selected>3 Months</option>
+        </select>
+        <button type="button" class="btn-primary btn-small" id="test-run">Run Test</button>
+      </div>
+      <div class="status" id="test-status" aria-live="polite"></div>
+      <div class="results table-wrap" id="test-results"></div>
+    </section>
+
+    <footer>
+      News data via <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_blank" rel="noopener">GDELT Project</a>.
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
