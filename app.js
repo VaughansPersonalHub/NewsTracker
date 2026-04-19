@@ -4,7 +4,7 @@
 //
 // ⚠️ SETUP: paste your deployed Apps Script Web App URL below.
 // See README.md for deployment steps.
-const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-oDlpZoQfvic6pYhjzbsntT0TeMCv4BX_xEOyFVuIbY1_KTyvPPeTSQj42HFkcwwX/exec';
 
 // GDELT Doc 2.0 API — no API key required, CORS-enabled.
 // Docs: https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
