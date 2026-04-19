@@ -1,17 +1,25 @@
 :root {
-  --accent: #1a73e8;
-  --accent-hover: #1557b0;
-  --danger: #d93025;
-  --danger-hover: #a50e0e;
-  --success: #188038;
-  --text: #202124;
-  --text-muted: #5f6368;
-  --border: #dadce0;
+  /* LCA.asia brand palette (sampled from live site) */
+  --navy: #052657;          /* primary dark — headings, button text on yellow */
+  --navy-hover: #0a3a82;
+  --yellow: #ffde00;         /* accent — primary CTAs */
+  --yellow-hover: #e6c700;
+  --blue: #225bb0;           /* secondary — links, icons */
+  --blue-hover: #1a4687;
+
+  --accent: var(--navy);     /* primary action uses navy */
+  --accent-hover: var(--navy-hover);
+  --danger: #b00020;
+  --danger-hover: #7a0014;
+  --success: #1f7a3a;
+  --text: #333333;
+  --text-muted: #5a5a5a;
+  --border: #d9dde5;
   --bg: #ffffff;
-  --bg-alt: #f8f9fa;
-  --bg-hover: #f1f3f4;
-  --radius: 6px;
-  --shadow: 0 1px 2px rgba(60, 64, 67, 0.1), 0 1px 3px rgba(60, 64, 67, 0.08);
+  --bg-alt: #f6f7f9;
+  --bg-hover: #eef1f6;
+  --radius: 4px;
+  --shadow: 0 1px 2px rgba(5, 38, 87, 0.08), 0 1px 3px rgba(5, 38, 87, 0.06);
 }
 
 * {
@@ -21,7 +29,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Inter, Roboto, sans-serif;
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
   background: var(--bg-alt);
   line-height: 1.5;
@@ -41,8 +49,10 @@ header {
 h1 {
   margin: 0 0 4px;
   font-size: 28px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--navy);
   letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 header p {
@@ -63,7 +73,10 @@ section {
 h2 {
   margin: 0 0 16px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 /* --- Setup banner --- */
@@ -107,8 +120,8 @@ h2 {
 }
 .form-row input[type="text"]:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(34, 91, 176, 0.2);
 }
 
 /* --- Buttons --- */
@@ -128,22 +141,28 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Primary = yellow LCA CTA with navy text */
 .btn-primary {
-  background: var(--accent);
-  color: white;
+  background: var(--yellow);
+  color: var(--navy);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 .btn-primary:hover:not(:disabled) {
-  background: var(--accent-hover);
+  background: var(--yellow-hover);
 }
 
+/* Secondary = outlined navy */
 .btn-secondary {
   background: var(--bg);
-  color: var(--accent);
-  border-color: var(--border);
+  color: var(--navy);
+  border-color: var(--navy);
+  font-weight: 600;
 }
 .btn-secondary:hover:not(:disabled) {
-  background: var(--bg-hover);
-  border-color: var(--accent);
+  background: var(--navy);
+  color: #fff;
 }
 
 .btn-danger {
@@ -239,7 +258,7 @@ tbody tr:hover td {
   margin: 0;
 }
 .test-subject strong {
-  color: var(--accent);
+  color: var(--blue);
 }
 
 .test-controls {
@@ -266,8 +285,8 @@ select {
 }
 select:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(34, 91, 176, 0.2);
 }
 
 .close-btn {
@@ -284,11 +303,12 @@ select:focus {
 }
 
 .results a {
-  color: var(--accent);
+  color: var(--blue);
   text-decoration: none;
 }
 .results a:hover {
   text-decoration: underline;
+  color: var(--blue-hover);
 }
 
 .loading {
